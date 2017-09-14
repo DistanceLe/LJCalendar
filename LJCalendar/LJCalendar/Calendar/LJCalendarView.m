@@ -21,7 +21,10 @@
 
 @property(nonatomic, strong)NSString* todayDateStr;
 @property(nonatomic, assign)NSInteger todayIndex;
+
 @property(nonatomic, assign)NSInteger selectIndex;
+@property(nonatomic, assign)NSInteger selectDayNum;
+@property(nonatomic, strong)NSString* selectDateStr;
 @property(nonatomic, strong)NSString* currentDateStr;
 
 
@@ -73,9 +76,9 @@
     self.dateStringArray = [NSMutableArray array];
     self.todayIndex = [TimeTools getDayWithDate:[NSDate date]];
     self.selectIndex = [TimeTools getDayWithDate:date];
+    self.selectDayNum = self.selectIndex;
     
     //当前的 年月
-    //self.currentDateStr = [TimeTools getCurrentTimesType:@"yyyy-MM"];
     self.currentDateStr = [TimeTools timestamp:date.timeIntervalSince1970 changeToTimeType:@"yyyy-MM"];
     self.todayDateStr = [TimeTools getCurrentTimesType:@"yyyy-MM"];
     [self.dateStringArray addObject:self.currentDateStr];
@@ -84,6 +87,7 @@
     NSDate* currentDate = [NSDate dateWithTimeIntervalSince1970:[TimeTools getTimestampFromTime:self.dateStringArray.firstObject dateType:@"yyyy-MM"]];
     [self.dateArray addObject:[self getDataFromDate:currentDate]];
     self.selectIndex += ([self.dateArray.firstObject[2] integerValue] -2);
+    self.selectDateStr = self.currentDateStr;
     
     //今天的 index
     NSString* todayStr = [TimeTools timestamp:[NSDate date].timeIntervalSince1970 changeToTimeType:@"yyyy-MM"];
@@ -105,7 +109,7 @@
     //第一次回调，的日期
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.15*NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (self.dateHandler) {
-            self.dateHandler(self.currentDateStr, date);
+            self.dateHandler(self.currentDateStr, date, [NSString stringWithFormat:@"%@-%ld", self.selectDateStr, self.selectDayNum]);
         }
     });
 }
@@ -169,7 +173,7 @@
     
     if ([self.dateStringArray[indexPath.item] isEqualToString:self.todayDateStr]) {
         [cell setTodayIndex:self.todayIndex];
-        cell.selectIndex = self.todayIndex;
+        //cell.selectIndex = self.todayIndex;
     }else{
         [cell setTodayIndex:-1];
     }
@@ -177,9 +181,11 @@
     [cell refreshCell:self.dateArray[indexPath.item]];
     
     //设置 用户手动设置的日期
-    if (self.selectIndex >= 0) {
+    if (self.selectIndex >= 0 && [self.dateStringArray[indexPath.item] isEqualToString:self.selectDateStr]) {
         [cell setCustomSelectIndex:self.selectIndex];
-        self.selectIndex = -1;
+        //self.selectIndex = -1;
+    }else{
+        [cell setCustomSelectIndex:-1];
     }
     
     __weak typeof(self) tempWeakSelf=self;
@@ -187,14 +193,17 @@
     //点击的回调
     cell.tapHandler = ^(NSInteger index) {
         //点击的日期 时间戳
-        tempWeakSelf.selectIndex = -1;
+        tempWeakSelf.selectIndex = index;
+        tempWeakSelf.selectDateStr = tempWeakSelf.currentDateStr;
         
-        NSInteger dayNum = index - [self.dateArray[indexPath.item][2] integerValue] + 2;
+        NSInteger dayNum = index - [tempWeakSelf.dateArray[indexPath.item][2] integerValue] + 2;
         NSString* dateStr = [NSString stringWithFormat:@"%@-%ld", tempWeakSelf.currentDateStr, dayNum];
         double timestamp = [TimeTools getTimestampFromTime:dateStr dateType:@"yyyy-MM-dd"];
         NSDate* date = [NSDate dateWithTimeIntervalSince1970:timestamp];
+        
+        tempWeakSelf.selectDayNum = dayNum;
         if (tempWeakSelf.dateHandler) {
-            tempWeakSelf.dateHandler(tempWeakSelf.currentDateStr, date);
+            tempWeakSelf.dateHandler(tempWeakSelf.currentDateStr, date, dateStr);
         }
     };
     
@@ -222,7 +231,7 @@
         if (self.dateHandler) {
             double timestamp = [TimeTools getTimestampFromTime:self.currentDateStr dateType:@"yyyy-MM"];
             NSDate* date = [NSDate dateWithTimeIntervalSince1970:timestamp];
-            self.dateHandler(self.currentDateStr, date);
+            self.dateHandler(self.currentDateStr, date, [NSString stringWithFormat:@"%@-%ld", self.selectDateStr, self.selectDayNum]);
         }
     }
 }

@@ -10,7 +10,7 @@
 
 @interface LJCalendarView : UIView
 
-@property(nonatomic, strong)void(^dateHandler)(NSString* dateString, NSDate* date);
+@property(nonatomic, strong)void(^dateHandler)(NSString* dateString, NSDate* date, NSString* selectedDate);
 
 +(instancetype)getCalendarWithFrame:(CGRect)frame;
 

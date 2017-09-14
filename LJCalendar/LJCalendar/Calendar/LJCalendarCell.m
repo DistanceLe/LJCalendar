@@ -68,7 +68,6 @@
         self.backViewWidthConstraint.constant = 36;
         self.backView.transform = CGAffineTransformIdentity;
     }
-    
 }
 
 

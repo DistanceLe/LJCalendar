@@ -28,17 +28,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    __weak typeof(self) tempWeakSelf=self;
+    
     LJCalendarView* calendar = [LJCalendarView getCalendarWithFrame:CGRectMake(0, 60, CGRectGetWidth(self.view.bounds), 400)];
-    calendar.dateHandler = ^(NSString *dateString, NSDate *date) {
-        NSString* commonDate = [TimeTools timestamp:date.timeIntervalSince1970 changeToTimeType:@"yyyy-MM-dd"];
+    
+    __weak typeof(self) tempWeakSelf=self;
+    calendar.dateHandler = ^(NSString *dateString, NSDate *date, NSString* selectedDate) {
         
+        //回调 日期，当前的日期，选中的日期
+        NSString* commonDate = [TimeTools timestamp:date.timeIntervalSince1970 changeToTimeType:@"yyyy-MM-dd"];
         NSArray* chineseDate = [TimeTools getChineseDateDetailFromDate:date];
-        tempWeakSelf.contentLabel.text = [NSString stringWithFormat:@"%@\n%@,%@,%@,%@",commonDate,chineseDate[0],chineseDate[1], chineseDate[2], chineseDate[3]];
+        
+        tempWeakSelf.contentLabel.text = [NSString stringWithFormat:@"%@  (选中的:%@)\n%@,%@,%@,%@",commonDate, selectedDate, chineseDate[0],chineseDate[1], chineseDate[2], chineseDate[3]];
     };
     [self.view addSubview:calendar];
-    
     self.calendarView = calendar;
+    
+    
+    
     
     //罗马日历， 通用
 //    NSCalendar* calendar = [[NSCalendar alloc]initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
