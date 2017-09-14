@@ -15,6 +15,9 @@
 /**  今天的日期 点 */
 @property(nonatomic, assign)NSInteger todayIndex;
 
+/**  是否显示农历 */
+@property(nonatomic, assign)BOOL showChineseCalendar;
+
 /**  选中某一天的回调 */
 @property(nonatomic, strong)void(^tapHandler)(NSInteger index);
 

@@ -15,6 +15,7 @@
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *backViewWidthConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *todayBackWidthConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *dateNumCenterOffest;
 
 @end
 
@@ -33,6 +34,18 @@
     
     self.backView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0, 0);
     self.backView.layer.cornerRadius = 18;
+}
+
+-(void)setHasChineseCalendar:(BOOL)hasChineseCalendar{
+    _hasChineseCalendar = hasChineseCalendar;
+    if (hasChineseCalendar) {
+        self.dateNumCenterOffest.constant = -10;
+        self.chineseNumLabel.hidden = NO;
+        
+    }else{
+        self.dateNumCenterOffest.constant = 0;
+        self.chineseNumLabel.hidden = YES;
+    }
 }
 
 /**  设置是否是今天 */

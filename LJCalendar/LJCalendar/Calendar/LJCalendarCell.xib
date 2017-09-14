@@ -81,6 +81,7 @@
                 <outlet property="backView" destination="XPe-uv-eoe" id="dWo-BG-YrM"/>
                 <outlet property="backViewWidthConstraint" destination="rq6-7y-UHc" id="nQ6-zr-YCf"/>
                 <outlet property="chineseNumLabel" destination="eDJ-zE-WyX" id="R9u-BH-s1j"/>
+                <outlet property="dateNumCenterOffest" destination="0O2-Xh-gkS" id="64H-XL-UtR"/>
                 <outlet property="dateNumLabel" destination="Ewb-Ec-Jx4" id="1RN-gI-zSJ"/>
                 <outlet property="todayBackView" destination="WIm-8p-660" id="dhq-eq-9YB"/>
                 <outlet property="todayBackWidthConstraint" destination="y1Q-pC-ha1" id="txk-fC-sxb"/>

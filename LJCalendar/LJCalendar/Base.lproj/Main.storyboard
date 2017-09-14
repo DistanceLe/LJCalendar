@@ -63,10 +63,25 @@
                                     <action selector="setClick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="SRu-BV-BMG"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4qy-Ol-o14">
+                                <rect key="frame" x="315" y="511" width="50" height="44"/>
+                                <color key="backgroundColor" red="0.3330758772846133" green="0.82727845565654212" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="5V6-SV-XJo"/>
+                                    <constraint firstAttribute="height" constant="44" id="x1K-jp-ehP"/>
+                                </constraints>
+                                <state key="normal" title="农历">
+                                    <color key="titleColor" red="1" green="0.17970545873443866" blue="0.52521515948250919" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="showChinese:" destination="BYZ-38-t0r" eventType="touchUpInside" id="aiJ-rc-k1I"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="uJk-Jp-Nyt" secondAttribute="trailing" id="0H4-E1-IhM"/>
+                            <constraint firstItem="86o-5s-mPR" firstAttribute="trailing" secondItem="4qy-Ol-o14" secondAttribute="trailing" id="697-5s-PyV"/>
                             <constraint firstItem="86o-5s-mPR" firstAttribute="leading" secondItem="Ycw-1P-uCA" secondAttribute="trailing" constant="5" id="CHc-rL-eZT"/>
                             <constraint firstItem="86o-5s-mPR" firstAttribute="width" secondItem="Ycw-1P-uCA" secondAttribute="width" id="DSi-Cq-9pG"/>
                             <constraint firstItem="uJk-Jp-Nyt" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Dld-fT-ukE"/>
@@ -78,6 +93,7 @@
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="UQH-A4-XAJ" secondAttribute="bottom" id="jhJ-tE-qiA"/>
                             <constraint firstItem="Ycw-1P-uCA" firstAttribute="leading" secondItem="UQH-A4-XAJ" secondAttribute="trailing" constant="8" id="puO-D4-cHd"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="uJk-Jp-Nyt" secondAttribute="bottom" id="rDL-Fx-gvg"/>
+                            <constraint firstItem="86o-5s-mPR" firstAttribute="top" secondItem="4qy-Ol-o14" secondAttribute="bottom" constant="8" id="vwk-7R-4bw"/>
                         </constraints>
                     </view>
                     <connections>

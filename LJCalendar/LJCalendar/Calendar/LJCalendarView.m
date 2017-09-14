@@ -39,11 +39,15 @@
 +(instancetype)getCalendarWithFrame:(CGRect)frame{
     LJCalendarView* calendarView = (LJCalendarView*)[[[NSBundle mainBundle]loadNibNamed:NSStringFromClass([LJCalendarView class]) owner:nil options:nil]lastObject];
     calendarView.frame = frame;
-    
-    [calendarView initData:[NSDate date]];
     [calendarView refreshFlowLayout];
+    [calendarView initData:[NSDate date]];
     
     return calendarView;
+}
+
+-(void)setShowChineseCalendar:(BOOL)showChineseCalendar{
+    _showChineseCalendar = showChineseCalendar;
+    [self.calendarCollectionView reloadData];
 }
 
 /**  显示今天的日历 */
@@ -57,6 +61,7 @@
 }
 
 -(void)refreshFlowLayout{
+    _showChineseCalendar = YES;
     
     UICollectionViewFlowLayout* flowLayout = [[UICollectionViewFlowLayout alloc]init];
     flowLayout.itemSize = CGSizeMake(CGRectGetWidth(self.frame), CGRectGetHeight(self.frame)-25);
@@ -168,7 +173,7 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     
     LJCalendarPageCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-    
+    cell.showChineseCalendar = self.showChineseCalendar;
     if ([self.dateStringArray[indexPath.item] isEqualToString:self.todayDateStr]) {
         [cell setTodayIndex:self.todayIndex];
         //cell.selectIndex = self.todayIndex;

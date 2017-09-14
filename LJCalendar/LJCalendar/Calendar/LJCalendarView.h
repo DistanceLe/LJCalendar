@@ -10,6 +10,9 @@
 
 @interface LJCalendarView : UIView
 
+/**  是否显示农历，默认YES 显示 */
+@property(nonatomic, assign)BOOL showChineseCalendar;
+
 @property(nonatomic, strong)void(^dateHandler)(NSString* dateString, NSDate* date, NSString* selectedDate);
 
 +(instancetype)getCalendarWithFrame:(CGRect)frame;

@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *chineseNumLabel;
 
 @property (nonatomic, assign)BOOL isTap;
+@property (nonatomic, assign)BOOL hasChineseCalendar;
 
 /**  设置是否是今天 */
 -(void)setIsToday:(BOOL)isToday;

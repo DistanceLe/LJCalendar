@@ -67,6 +67,14 @@
     [self.calendarView setCustomDate:date];
 }
 
+- (IBAction)showChinese:(UIButton *)sender {
+    sender.selected = !sender.selected;
+    if (sender.selected) {
+        self.calendarView.showChineseCalendar = NO;
+    }else{
+        self.calendarView.showChineseCalendar = YES;
+    }
+}
 
 
 -(void)testCalendar:(NSCalendar*)calendar{

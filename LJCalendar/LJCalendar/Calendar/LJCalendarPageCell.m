@@ -71,6 +71,7 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     
     LJCalendarCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+    cell.hasChineseCalendar = self.showChineseCalendar;
     if (indexPath.item < self.firstWeekDay-1) {
         //最前面的几天是空的。
         cell.contentView.hidden = YES;
