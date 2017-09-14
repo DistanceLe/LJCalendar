@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2A0748DF1F676EF200D74A7D /* TimeTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A0748DE1F676EF200D74A7D /* TimeTools.m */; };
 		2A0748E31F67741000D74A7D /* LJCalendarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A0748E11F67741000D74A7D /* LJCalendarCell.m */; };
 		2A0748E41F67741000D74A7D /* LJCalendarCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2A0748E21F67741000D74A7D /* LJCalendarCell.xib */; };
 		2A0748E71F67748300D74A7D /* LJCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A0748E61F67748300D74A7D /* LJCalendarView.m */; };
@@ -20,11 +19,10 @@
 		2A3C64F51F6232A4004B112C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A3C64F31F6232A4004B112C /* Main.storyboard */; };
 		2A3C64F71F6232A4004B112C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2A3C64F61F6232A4004B112C /* Assets.xcassets */; };
 		2A3C64FA1F6232A5004B112C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A3C64F81F6232A5004B112C /* LaunchScreen.storyboard */; };
+		2A4207441F6A717E0088456F /* TimeTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A4207431F6A717E0088456F /* TimeTools.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2A0748DD1F676EF200D74A7D /* TimeTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeTools.h; sourceTree = "<group>"; };
-		2A0748DE1F676EF200D74A7D /* TimeTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeTools.m; sourceTree = "<group>"; };
 		2A0748E01F67741000D74A7D /* LJCalendarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LJCalendarCell.h; sourceTree = "<group>"; };
 		2A0748E11F67741000D74A7D /* LJCalendarCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LJCalendarCell.m; sourceTree = "<group>"; };
 		2A0748E21F67741000D74A7D /* LJCalendarCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LJCalendarCell.xib; sourceTree = "<group>"; };
@@ -44,6 +42,8 @@
 		2A3C64F61F6232A4004B112C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2A3C64F91F6232A5004B112C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2A3C64FB1F6232A5004B112C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2A4207421F6A717E0088456F /* TimeTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeTools.h; sourceTree = "<group>"; };
+		2A4207431F6A717E0088456F /* TimeTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeTools.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +60,7 @@
 		2A0748DB1F676EF200D74A7D /* Calendar */ = {
 			isa = PBXGroup;
 			children = (
+				2A4207411F6A717E0088456F /* Tool */,
 				2A0748E01F67741000D74A7D /* LJCalendarCell.h */,
 				2A0748E11F67741000D74A7D /* LJCalendarCell.m */,
 				2A0748E21F67741000D74A7D /* LJCalendarCell.xib */,
@@ -71,15 +72,6 @@
 				2A0748E81F67749000D74A7D /* LJCalendarView.xib */,
 			);
 			path = Calendar;
-			sourceTree = "<group>";
-		};
-		2A0748DC1F676EF200D74A7D /* Tool */ = {
-			isa = PBXGroup;
-			children = (
-				2A0748DD1F676EF200D74A7D /* TimeTools.h */,
-				2A0748DE1F676EF200D74A7D /* TimeTools.m */,
-			);
-			path = Tool;
 			sourceTree = "<group>";
 		};
 		2A3C64DE1F6232A4004B112C = {
@@ -102,7 +94,6 @@
 			isa = PBXGroup;
 			children = (
 				2A0748DB1F676EF200D74A7D /* Calendar */,
-				2A0748DC1F676EF200D74A7D /* Tool */,
 				2A3C64ED1F6232A4004B112C /* AppDelegate.h */,
 				2A3C64EE1F6232A4004B112C /* AppDelegate.m */,
 				2A3C64F01F6232A4004B112C /* ViewController.h */,
@@ -122,6 +113,15 @@
 				2A3C64EB1F6232A4004B112C /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		2A4207411F6A717E0088456F /* Tool */ = {
+			isa = PBXGroup;
+			children = (
+				2A4207421F6A717E0088456F /* TimeTools.h */,
+				2A4207431F6A717E0088456F /* TimeTools.m */,
+			);
+			path = Tool;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -199,8 +199,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2A0748DF1F676EF200D74A7D /* TimeTools.m in Sources */,
 				2A0748ED1F6785EE00D74A7D /* LJCalendarPageCell.m in Sources */,
+				2A4207441F6A717E0088456F /* TimeTools.m in Sources */,
 				2A3C64F21F6232A4004B112C /* ViewController.m in Sources */,
 				2A3C64EF1F6232A4004B112C /* AppDelegate.m in Sources */,
 				2A0748E31F67741000D74A7D /* LJCalendarCell.m in Sources */,
