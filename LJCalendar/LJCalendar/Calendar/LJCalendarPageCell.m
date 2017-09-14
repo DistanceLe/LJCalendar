@@ -31,7 +31,6 @@
           forCellWithReuseIdentifier:@"cell"];
 }
 
-
 -(void)refreshFlowLayout:(NSInteger)lineNum{
     [self setNeedsLayout];
     [self layoutIfNeeded];
@@ -55,11 +54,9 @@
     if (self.todayIndex < 0) {
         self.selectIndex = [array[2] integerValue]-1;
     }
-    
     self.chineseData = [NSArray arrayWithArray:array.lastObject];
-    
-    [self.collectionView reloadData];
 }
+
 -(void)setCustomSelectIndex:(NSInteger)index{
     self.selectIndex = index;
     [self.collectionView reloadData];
@@ -105,8 +102,6 @@
             NSString* day = [TimeTools getChineseDayString:startDay];
             cell.chineseNumLabel.text = day;
         }
-        
-        
         
         //周末 改变对应的颜色
         if ((indexPath.item+1) % 7 == 0 || indexPath.item % 7 == 0) {

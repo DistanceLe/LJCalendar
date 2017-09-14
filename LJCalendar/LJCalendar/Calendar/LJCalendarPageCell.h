@@ -18,8 +18,10 @@
 /**  选中某一天的回调 */
 @property(nonatomic, strong)void(^tapHandler)(NSInteger index);
 
+/**  刷新一个月的 日历 */
 -(void)refreshCell:(NSArray*)array;
 
+/**  设置当前月的选择位置，无选中-1 */
 -(void)setCustomSelectIndex:(NSInteger)index;
 
 @end

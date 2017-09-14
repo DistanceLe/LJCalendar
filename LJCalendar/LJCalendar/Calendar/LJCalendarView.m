@@ -25,8 +25,8 @@
 @property(nonatomic, assign)NSInteger selectIndex;
 @property(nonatomic, assign)NSInteger selectDayNum;
 @property(nonatomic, strong)NSString* selectDateStr;
-@property(nonatomic, strong)NSString* currentDateStr;
 
+@property(nonatomic, strong)NSString* currentDateStr;
 
 @end
 
@@ -35,7 +35,6 @@
 -(void)awakeFromNib{
     [super awakeFromNib];
 }
-
 
 +(instancetype)getCalendarWithFrame:(CGRect)frame{
     LJCalendarView* calendarView = (LJCalendarView*)[[[NSBundle mainBundle]loadNibNamed:NSStringFromClass([LJCalendarView class]) owner:nil options:nil]lastObject];
@@ -56,7 +55,6 @@
 -(void)setCustomDate:(NSDate*)date{
     [self initData:date];
 }
-
 
 -(void)refreshFlowLayout{
     
@@ -122,7 +120,7 @@
     
     NSArray* chineseDate = [TimeTools getChineseDateFromDate:date dayNumOfMonth:dayNum];
     
-    //         总天数，     总周数，    第一天的星期数, 农历信息
+    //         总天数，     总周数，   第一天的星期数, 农历信息
     return @[@(dayNum), @(weekNum), @(weekday), chineseDate];
 }
 

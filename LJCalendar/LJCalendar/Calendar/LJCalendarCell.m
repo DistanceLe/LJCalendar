@@ -70,7 +70,6 @@
     }
 }
 
-
 -(void)cancelTap:(BOOL)animation{
     self.isTap = NO;
     if (animation) {
