@@ -16,8 +16,8 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "LJCalendar"
-  s.version      = "1.0.6"
-  s.summary      = "自定义日历，可选择显示农历，全局唯一一个选定日期，横向滑动"
+  s.version      = "1.0.7"
+  s.summary      = "自定义日历，可选择显示农历，全局唯一一个选定日期，横向滑动, 自动适应frame大小"
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
