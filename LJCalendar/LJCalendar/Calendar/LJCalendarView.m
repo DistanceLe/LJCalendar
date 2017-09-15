@@ -37,7 +37,8 @@
 }
 
 +(instancetype)getCalendarWithFrame:(CGRect)frame{
-    LJCalendarView* calendarView = (LJCalendarView*)[[[NSBundle mainBundle]loadNibNamed:NSStringFromClass([LJCalendarView class]) owner:nil options:nil]lastObject];
+    LJCalendarView* calendarView = (LJCalendarView*)[[[NSBundle bundleForClass:[LJCalendarView class]]loadNibNamed:NSStringFromClass([LJCalendarView class]) owner:nil options:nil]lastObject];
+    
     calendarView.frame = frame;
     [calendarView refreshFlowLayout];
     [calendarView initData:[NSDate date]];
@@ -71,7 +72,7 @@
     self.calendarCollectionView.dataSource = self;
     self.calendarCollectionView.prefetchingEnabled = NO;
     self.calendarCollectionView.collectionViewLayout = flowLayout;
-    [self.calendarCollectionView registerNib:[UINib nibWithNibName:NSStringFromClass([LJCalendarPageCell class]) bundle:nil] forCellWithReuseIdentifier:@"cell"];
+    [self.calendarCollectionView registerNib:[UINib nibWithNibName:NSStringFromClass([LJCalendarPageCell class]) bundle:[NSBundle bundleForClass:[LJCalendarPageCell class]]] forCellWithReuseIdentifier:@"cell"];
 }
 
 -(void)initData:(NSDate*)date{

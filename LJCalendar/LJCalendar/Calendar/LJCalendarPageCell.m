@@ -27,7 +27,7 @@
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
     [self.collectionView registerNib:
-     [UINib nibWithNibName:NSStringFromClass([LJCalendarCell class]) bundle:nil]
+     [UINib nibWithNibName:NSStringFromClass([LJCalendarCell class]) bundle:[NSBundle bundleForClass:[LJCalendarCell class]]]
           forCellWithReuseIdentifier:@"cell"];
 }
 

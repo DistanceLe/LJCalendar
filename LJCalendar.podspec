@@ -95,7 +95,7 @@ Pod::Spec.new do |s|
   #排除的文件
   #s.exclude_files = "Classes/Exclude"
 
-  s.public_header_files = "LJCalendar/LJCalendar/Calendar/LJCalendarView.h"
+  #s.public_header_files = "LJCalendar/LJCalendar/Calendar/LJCalendarView.h"
 
 
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -108,6 +108,8 @@ Pod::Spec.new do |s|
 
   # s.resource  = "icon.png"
   # s.resources = "Resources/*.png"
+  s.resources = "LJCalendar/LJCalendar/Calendar/*.{storyboard,xib,xcassets,json,imageset,png}"
+
 
   # s.preserve_paths = "FilesToSave", "MoreFilesToSave"
 
