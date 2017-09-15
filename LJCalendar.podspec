@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "LJCalendar"
-  s.version      = "1.0.3"
+  s.version      = "1.0.4"
   s.summary      = "自定义的 (农历,新历)日历."
 
   # This description is used to generate tags and improve search results.
@@ -53,8 +53,8 @@ Pod::Spec.new do |s|
   #  profile URL.
   #
 
-  s.author             = { "DistanceLe" => "lijie_yan@163.com" }
-  # Or just: s.author    = "lijie"
+  #s.author             = { "DistanceLe" => "lijie_yan@163.com" }
+  s.author    = "DistanceLe"
   # s.authors            = { "lijie" => "rd32@ce-link.com" }
   # s.social_media_url   = "http://twitter.com/lijie"
 
