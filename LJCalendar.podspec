@@ -16,8 +16,8 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "LJCalendar"
-  s.version      = "1.0.4"
-  s.summary      = "自定义的 (农历,新历)日历."
+  s.version      = "1.0.5"
+  s.summary      = "LJCalendar 自定义日历，可选择显示农历，全局唯一一个选定日期，横向滑动"
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   s.description  = <<-DESC  
-农历可选择显示，丝丝顺滑的自定义日历
+LJCalendar 农历可选择显示，丝丝顺滑的自定义日历
                    DESC
 
   s.homepage     = "https://github.com/DistanceLe/LJCalendar"
@@ -54,7 +54,7 @@ Pod::Spec.new do |s|
   #
 
   #s.author             = { "DistanceLe" => "lijie_yan@163.com" }
-  s.author    = "DistanceLe"
+  s.author    = "LJCalendar"
   # s.authors            = { "lijie" => "rd32@ce-link.com" }
   # s.social_media_url   = "http://twitter.com/lijie"
 
