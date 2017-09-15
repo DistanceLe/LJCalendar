@@ -160,9 +160,9 @@
 -(void)scrollCurrentIndex{
     NSInteger index = [self.dateStringArray indexOfObject:self.currentDateStr];
     
-    self.calendarCollectionView.contentOffset = CGPointMake(CGRectGetWidth(self.calendarCollectionView.bounds)*index, 0);
+//    self.calendarCollectionView.contentOffset = CGPointMake(CGRectGetWidth(self.calendarCollectionView.bounds)*index, 0);
     
-//    [self.calendarCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0] atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
+    [self.calendarCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0] atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
 }
 
 #pragma mark - ================ Delegate ==================

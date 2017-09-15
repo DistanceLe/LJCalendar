@@ -74,24 +74,27 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     
     LJCalendarCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-    CGFloat minSize = MIN(_itemWidth, _itemHeight); //53 -> 23 11
-    CGFloat dateFontSize = 23;
-    CGFloat chineseFontSize = 11;
-    CGFloat labelWidth = 30;
-    if (minSize < 53 && minSize >= 25) {
-        chineseFontSize -= (53-minSize)/4.0;
-        dateFontSize -= (53-minSize)/4.0;
-        labelWidth -= (53-minSize)/2.8;
-        
-    }else if (minSize < 25){
-        chineseFontSize -= 8;
-        dateFontSize -= 8;
-        labelWidth -= 10;
-    }
-    cell.chineseNumLabel.font = [UIFont systemFontOfSize:chineseFontSize];
-    cell.dateNumLabel.font = [UIFont systemFontOfSize:dateFontSize];
-    cell.dateLabelWidth.constant = labelWidth;
     
+    {//根据frame 设置字体大小
+        CGFloat minSize = MIN(_itemWidth, _itemHeight); //53 -> 23 11
+        CGFloat dateFontSize = 23;
+        CGFloat chineseFontSize = 11;
+        CGFloat labelWidth = 30;
+        if (minSize < 53 && minSize >= 25) {
+            chineseFontSize -= (53-minSize)/4.0;
+            dateFontSize -= (53-minSize)/4.0;
+            labelWidth -= (53-minSize)/2.8;
+            
+        }else if (minSize < 25){
+            chineseFontSize -= 8;
+            dateFontSize -= 8;
+            labelWidth -= 10;
+        }
+        cell.chineseNumLabel.font = [UIFont systemFontOfSize:chineseFontSize];
+        cell.dateNumLabel.font = [UIFont systemFontOfSize:dateFontSize];
+        cell.dateLabelWidth.constant = labelWidth;
+    }
+
     cell.hasChineseCalendar = self.showChineseCalendar;
     if (indexPath.item < self.firstWeekDay-1) {
         //最前面的几天是空的。
