@@ -15,6 +15,9 @@
 /**  农历的 日期 */
 @property (weak, nonatomic) IBOutlet UILabel *chineseNumLabel;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *dateLabelWidth;
+
+
 @property (nonatomic, assign)BOOL isTap;
 @property (nonatomic, assign)BOOL hasChineseCalendar;
 

@@ -16,6 +16,9 @@
 @property(nonatomic, assign)NSInteger itemNum;
 @property(nonatomic, assign)NSInteger firstWeekDay;
 
+@property(nonatomic, assign)NSInteger itemWidth;
+@property(nonatomic, assign)NSInteger itemHeight;
+
 @property(nonatomic, strong)NSArray* chineseData;
 
 @end
@@ -35,14 +38,14 @@
     [self setNeedsLayout];
     [self layoutIfNeeded];
     
-    CGFloat itemWidth = CGRectGetWidth(self.frame)/7.0;
-    CGFloat itemHeight = (CGRectGetHeight(self.frame)-8)/lineNum/1.0;
+    _itemWidth = CGRectGetWidth(self.frame)/7.0;
+    _itemHeight = (CGRectGetHeight(self.frame)-8)/lineNum/1.0;
     
     UICollectionViewFlowLayout* flowLayout = [[UICollectionViewFlowLayout alloc]init];
     flowLayout.minimumLineSpacing = 0;
     flowLayout.minimumInteritemSpacing = 0;
     flowLayout.sectionInset = UIEdgeInsetsMake(5, 0, 3, 0);
-    flowLayout.itemSize = CGSizeMake(itemWidth, itemHeight);
+    flowLayout.itemSize = CGSizeMake(_itemWidth, _itemHeight);
     self.collectionView.collectionViewLayout = flowLayout;
 }
 
@@ -71,6 +74,24 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     
     LJCalendarCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+    CGFloat minSize = MIN(_itemWidth, _itemHeight); //53 -> 23 11
+    CGFloat dateFontSize = 23;
+    CGFloat chineseFontSize = 11;
+    CGFloat labelWidth = 30;
+    if (minSize < 53 && minSize >= 25) {
+        chineseFontSize -= (53-minSize)/4.0;
+        dateFontSize -= (53-minSize)/4.0;
+        labelWidth -= (53-minSize)/2.8;
+        
+    }else if (minSize < 25){
+        chineseFontSize -= 8;
+        dateFontSize -= 8;
+        labelWidth -= 10;
+    }
+    cell.chineseNumLabel.font = [UIFont systemFontOfSize:chineseFontSize];
+    cell.dateNumLabel.font = [UIFont systemFontOfSize:dateFontSize];
+    cell.dateLabelWidth.constant = labelWidth;
+    
     cell.hasChineseCalendar = self.showChineseCalendar;
     if (indexPath.item < self.firstWeekDay-1) {
         //最前面的几天是空的。
