@@ -32,6 +32,11 @@
     LJCalendarView* calendar = [LJCalendarView getCalendarWithFrame:CGRectMake(0, 60, CGRectGetWidth(self.view.bounds), 400)];
     
     __weak typeof(self) tempWeakSelf=self;
+    
+    [calendar setDateHandler:^(NSString *dateString, NSDate *date, NSString *selectedDate) {
+        
+    }];
+    
     calendar.dateHandler = ^(NSString *dateString, NSDate *date, NSString* selectedDate) {
         
         //回调 日期，当前的日期，选中的日期
