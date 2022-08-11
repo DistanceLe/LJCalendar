@@ -12,10 +12,22 @@
 
 /**  是否显示农历，默认YES 显示 */
 @property(nonatomic, assign)BOOL showChineseCalendar;
+/**  是否显示 最后一行的线， 默认不显示 */
+@property(nonatomic, assign)BOOL showLastLine;
 
-@property(nonatomic, strong)void(^dateHandler)(NSString* dateString, NSDate* date, NSString* selectedDate);
+
+/**  最小 有效的日期 */
+@property(nonatomic, strong)NSDate* minDate;
+/**  最大 有效的日期 */
+@property(nonatomic, strong)NSDate* maxDate;
+
+
+/**  当前页面显示的 年月， 选中的日期 */
+@property(nonatomic, strong)void(^dateHandler)(NSString* currentShowYearAndMonth, NSDate* selectDate, NSString* selectedDateStr);
 
 +(instancetype)getCalendarWithFrame:(CGRect)frame;
+
+-(void)refreshFlowLayout;
 
 /**  显示今天的日历 */
 -(void)showToday;

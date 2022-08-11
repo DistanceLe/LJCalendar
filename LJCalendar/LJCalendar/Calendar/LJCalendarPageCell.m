@@ -29,9 +29,12 @@
     [super awakeFromNib];
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
+    
     [self.collectionView registerNib:
      [UINib nibWithNibName:NSStringFromClass([LJCalendarCell class]) bundle:[NSBundle bundleForClass:[LJCalendarCell class]]]
           forCellWithReuseIdentifier:@"cell"];
+//    self.backgroundColor = [UIColor clearColor];
+//    self.backgroundView.backgroundColor = [UIColor clearColor];
 }
 
 -(void)refreshFlowLayout:(NSInteger)lineNum{
@@ -41,16 +44,23 @@
     _itemWidth = CGRectGetWidth(self.frame)/7.0;
     _itemHeight = (CGRectGetHeight(self.frame)-8)/lineNum/1.0;
     
-    UICollectionViewFlowLayout* flowLayout = [[UICollectionViewFlowLayout alloc]init];
+    UICollectionViewFlowLayout* flowLayout = (UICollectionViewFlowLayout*)self.collectionView.collectionViewLayout;
+    if (!flowLayout) {
+        flowLayout = [[UICollectionViewFlowLayout alloc]init];
+    }
+    
     flowLayout.minimumLineSpacing = 0;
     flowLayout.minimumInteritemSpacing = 0;
     flowLayout.sectionInset = UIEdgeInsetsMake(5, 0, 3, 0);
     flowLayout.itemSize = CGSizeMake(_itemWidth, _itemHeight);
-    self.collectionView.collectionViewLayout = flowLayout;
+//    self.collectionView.collectionViewLayout = flowLayout;
+    [self.collectionView setCollectionViewLayout:flowLayout animated:NO];
 }
 
 -(void)refreshCell:(NSArray *)array{
+    
     [self refreshFlowLayout:[array[1] integerValue]];
+    
     self.itemNum = [array[0] integerValue];
     self.firstWeekDay = [array[2] integerValue];
     
@@ -103,6 +113,20 @@
         //从星期几(firstWeekDay)开始 显示
         cell.contentView.hidden = NO;
         
+        if (!self.showLastLine) {
+            NSInteger lastCount = ((self.itemNum + self.firstWeekDay -1)%7);
+            lastCount = lastCount>0?lastCount:7;
+            
+            if ((indexPath.item+lastCount) >= (self.itemNum + self.firstWeekDay -1)) {
+                cell.bottomLine.hidden = YES;
+            }else{
+                cell.bottomLine.hidden = NO;
+            }
+        }else{
+            cell.bottomLine.hidden = NO;
+        }
+        
+        
         NSInteger dayNum = indexPath.item-self.firstWeekDay+2;
         //新历几号
         cell.dateNumLabel.text = [@(dayNum) stringValue];
@@ -128,11 +152,23 @@
             cell.chineseNumLabel.text = day;
         }
         
+        //判断是否在有效日期中：
+        BOOL isValid = YES;
+        if (self.minDate && self.maxDate) {
+            NSString* dateStr = [NSString stringWithFormat:@"%@-%ld", self.currentYearAndMonth, dayNum];
+            double timestamp = [TimeTools getTimestampFromTime:dateStr dateType:@"yyyy-MM-dd"];
+            if (timestamp < self.minDate.timeIntervalSince1970 ||
+                timestamp > self.maxDate.timeIntervalSince1970) {
+                isValid = NO;
+            }
+        }
+        
+        
         //周末 改变对应的颜色
         if ((indexPath.item+1) % 7 == 0 || indexPath.item % 7 == 0) {
-            [cell setIsWeekend:YES];
+            [cell setIsWeekend:YES isValid:isValid];
         }else{
-            [cell setIsWeekend:NO];
+            [cell setIsWeekend:NO isValid:isValid];
         }
         
         //是否是今天的日期，特殊标志
@@ -160,6 +196,11 @@
     if (self.selectIndex == indexPath.item) {
         return;
     }
+    LJCalendarCell* tapCell = (LJCalendarCell*)[collectionView cellForItemAtIndexPath:indexPath];
+    if (!tapCell.isValid) {
+        return;
+    }
+    
     if (self.selectIndex >= 0) {
         LJCalendarCell* cell = (LJCalendarCell*)[collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:self.selectIndex inSection:0]];
         if (cell) {
@@ -167,8 +208,8 @@
         }
     }
     
-    LJCalendarCell* cell = (LJCalendarCell*)[collectionView cellForItemAtIndexPath:indexPath];
-    [cell tapCell:YES];
+    
+    [tapCell tapCell:YES];
     self.selectIndex = indexPath.item;
     if (self.tapHandler) {
         self.tapHandler(self.selectIndex);

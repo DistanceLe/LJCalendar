@@ -25,6 +25,7 @@
 @property(nonatomic, assign)NSInteger selectIndex;
 @property(nonatomic, assign)NSInteger selectDayNum;
 @property(nonatomic, strong)NSString* selectDateStr;
+@property(nonatomic, strong)NSDate* selectDate;
 
 @property(nonatomic, strong)NSString* currentDateStr;
 
@@ -34,12 +35,30 @@
 
 -(void)awakeFromNib{
     [super awakeFromNib];
+    
+    self.calendarCollectionView.delegate = self;
+    self.calendarCollectionView.dataSource = self;
+    
+    [self.calendarCollectionView registerNib:[UINib nibWithNibName:NSStringFromClass([LJCalendarPageCell class]) bundle:[NSBundle bundleForClass:[LJCalendarPageCell class]]] forCellWithReuseIdentifier:@"cell"];
+    
+//    NSArray* tempArray = @[LS(@"HY_Mon"), LS(@"HY_Tue"), LS(@"HY_Wed"), LS(@"HY_Thu"), LS(@"HY_Fri"), LS(@"HY_Sat"), LS(@"HY_Sun")];
+//    
+//    for (NSInteger i = 1; i<= 7; i++) {
+//        UILabel* weekLabel = (UILabel*)[self viewWithTag:i];
+//        weekLabel.text = tempArray[i-1];
+//    }
+    
+    self.layer.cornerRadius = 6;
+    self.layer.shadowColor = [UIColor blackColor].CGColor;
+    self.layer.shadowOffset = CGSizeMake(0, 2);
+    self.layer.shadowOpacity = 0.3;
 }
 
 +(instancetype)getCalendarWithFrame:(CGRect)frame{
     LJCalendarView* calendarView = (LJCalendarView*)[[[NSBundle bundleForClass:[LJCalendarView class]]loadNibNamed:NSStringFromClass([LJCalendarView class]) owner:nil options:nil]lastObject];
     
     calendarView.frame = frame;
+    calendarView.showChineseCalendar = YES;
     [calendarView refreshFlowLayout];
     [calendarView initData:[NSDate date]];
     
@@ -50,6 +69,20 @@
     _showChineseCalendar = showChineseCalendar;
     [self.calendarCollectionView reloadData];
 }
+-(void)setShowLastLine:(BOOL)showLastLine{
+    _showLastLine = showLastLine;
+    [self.calendarCollectionView reloadData];
+}
+
+-(void)setMinDate:(NSDate *)minDate{
+    _minDate = minDate;
+    [self.calendarCollectionView reloadData];
+}
+-(void)setMaxDate:(NSDate *)maxDate{
+    _maxDate = maxDate;
+    [self.calendarCollectionView reloadData];
+}
+
 
 /**  显示今天的日历 */
 -(void)showToday{
@@ -62,20 +95,30 @@
 }
 
 -(void)refreshFlowLayout{
-    _showChineseCalendar = YES;
     
-    UICollectionViewFlowLayout* flowLayout = [[UICollectionViewFlowLayout alloc]init];
+    UICollectionViewFlowLayout* flowLayout = (UICollectionViewFlowLayout*)self.calendarCollectionView.collectionViewLayout;
+    if (!flowLayout) {
+        flowLayout = [[UICollectionViewFlowLayout alloc]init];
+    }
+    
     flowLayout.itemSize = CGSizeMake(CGRectGetWidth(self.frame), CGRectGetHeight(self.frame)-25);
     flowLayout.minimumLineSpacing = 0;
     flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    self.calendarCollectionView.delegate = self;
-    self.calendarCollectionView.dataSource = self;
-    self.calendarCollectionView.prefetchingEnabled = NO;
-    self.calendarCollectionView.collectionViewLayout = flowLayout;
-    [self.calendarCollectionView registerNib:[UINib nibWithNibName:NSStringFromClass([LJCalendarPageCell class]) bundle:[NSBundle bundleForClass:[LJCalendarPageCell class]]] forCellWithReuseIdentifier:@"cell"];
+    
+//    self.calendarCollectionView.prefetchingEnabled = NO;
+//    self.calendarCollectionView.collectionViewLayout = flowLayout;
+    [self.calendarCollectionView setCollectionViewLayout:flowLayout animated:NO];
+    
+    [self.calendarCollectionView reloadData];
+}
+-(void)layoutSubviews{
+    [super layoutSubviews];
+    [self refreshFlowLayout];
+    [self scrollCurrentIndex];
 }
 
 -(void)initData:(NSDate*)date{
+    
     self.dateArray = [NSMutableArray array];
     self.dateStringArray = [NSMutableArray array];
     self.todayIndex = [TimeTools getDayWithDate:[NSDate date]];
@@ -83,7 +126,7 @@
     self.selectDayNum = self.selectIndex;
     
     //当前的 年月
-    self.currentDateStr = [TimeTools timestamp:date.timeIntervalSince1970 changeToTimeType:@"yyyy-MM"];
+    self.currentDateStr = [TimeTools timestamp:date.timeIntervalSince1970 changeToOriginTimeType:@"yyyy-MM"];
     self.todayDateStr = [TimeTools getCurrentTimesType:@"yyyy-MM"];
     [self.dateStringArray addObject:self.currentDateStr];
     
@@ -94,11 +137,12 @@
     self.selectDateStr = self.currentDateStr;
     
     //今天的 index
-    NSString* todayStr = [TimeTools timestamp:[NSDate date].timeIntervalSince1970 changeToTimeType:@"yyyy-MM"];
+    NSString* todayStr = [TimeTools timestamp:[NSDate date].timeIntervalSince1970 changeToOriginTimeType:@"yyyy-MM"];
     NSArray* todayArray = [self getDataFromDate:[NSDate dateWithTimeIntervalSince1970:[TimeTools getTimestampFromTime:todayStr dateType:@"yyyy-MM"]]];
     self.todayIndex += ([todayArray[2] integerValue] - 2);
     
     //添加上一个月的数据
+    [self addPreviousDataFromDateStr:nil];
     [self addPreviousDataFromDateStr:nil];
     
     [self.calendarCollectionView reloadData];
@@ -106,13 +150,16 @@
     //加载下一个月的数据
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05*NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self addNextDataFromDateStr:nil];
+        [self addNextDataFromDateStr:nil];
         [self scrollCurrentIndex];
+        [self.calendarCollectionView reloadData];
     });
     [self scrollCurrentIndex];
-    
+    [self.calendarCollectionView reloadData];
     //第一次回调，的日期
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.15*NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (self.dateHandler) {
+            self.selectDate = date;
             self.dateHandler(self.currentDateStr, date, [NSString stringWithFormat:@"%@-%ld", self.selectDateStr, self.selectDayNum]);
         }
     });
@@ -137,7 +184,7 @@
     timestamp += dayNum*24*60*60;
     
     NSDate* nextDate = [NSDate dateWithTimeIntervalSince1970:timestamp];
-    [self.dateStringArray addObject:[TimeTools timestamp:timestamp changeToTimeType:@"yyyy-MM"]];
+    [self.dateStringArray addObject:[TimeTools timestamp:timestamp changeToOriginTimeType:@"yyyy-MM"]];
     [self.dateArray addObject:[self getDataFromDate:nextDate]];
     
     [self.calendarCollectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:(self.dateArray.count-1) inSection:0]]];
@@ -148,7 +195,7 @@
     double timestamp = [TimeTools getTimestampFromTime:self.dateStringArray.firstObject dateType:@"yyyy-MM"];
     timestamp -= 24*60*60;
     if (timestamp > 0) {
-        NSString* previousStr = [TimeTools timestamp:timestamp changeToTimeType:@"yyyy-MM"];
+        NSString* previousStr = [TimeTools timestamp:timestamp changeToOriginTimeType:@"yyyy-MM"];
         timestamp = [TimeTools getTimestampFromTime:previousStr dateType:@"yyyy-MM"];
         
         NSDate* nextDate = [NSDate dateWithTimeIntervalSince1970:timestamp];
@@ -175,6 +222,11 @@
     
     LJCalendarPageCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
     cell.showChineseCalendar = self.showChineseCalendar;
+    cell.showLastLine = self.showLastLine;
+    cell.minDate = self.minDate;
+    cell.maxDate = self.maxDate;
+    cell.currentYearAndMonth = self.dateStringArray[indexPath.item];
+    
     if ([self.dateStringArray[indexPath.item] isEqualToString:self.todayDateStr]) {
         [cell setTodayIndex:self.todayIndex];
         //cell.selectIndex = self.todayIndex;
@@ -204,7 +256,7 @@
         NSString* dateStr = [NSString stringWithFormat:@"%@-%ld", tempWeakSelf.currentDateStr, dayNum];
         double timestamp = [TimeTools getTimestampFromTime:dateStr dateType:@"yyyy-MM-dd"];
         NSDate* date = [NSDate dateWithTimeIntervalSince1970:timestamp];
-        
+        self.selectDate = date;
         tempWeakSelf.selectDayNum = dayNum;
         if (tempWeakSelf.dateHandler) {
             tempWeakSelf.dateHandler(tempWeakSelf.currentDateStr, date, dateStr);
@@ -215,28 +267,32 @@
 }
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    NSArray<NSIndexPath *> * indexPaths = [self.calendarCollectionView indexPathsForVisibleItems];
-    if (indexPaths.count) {
-        NSIndexPath* visible = indexPaths.firstObject;
-        self.currentDateStr = self.dateStringArray[visible.item];
+//    NSArray<NSIndexPath *> * indexPaths = [self.calendarCollectionView indexPathsForVisibleItems];
+//    if (indexPaths.count) {
+//
+//    }
+    
+    NSIndexPath* visible = [NSIndexPath indexPathForItem:(int64_t)(scrollView.contentOffset.x+1)/scrollView.bounds.size.width inSection:0];
+    
+    self.currentDateStr = self.dateStringArray[visible.item];
+    
+    NSLog(@"........%ld", visible.item);
+    //加载前面一个月的数据
+    if (visible.item <= 1) {
+        [self addPreviousDataFromDateStr:nil];
         
-        //加载前面一个月的数据
-        if (visible.item == 0) {
-            [self addPreviousDataFromDateStr:nil];
-            
-            [self.calendarCollectionView reloadData];
-            [self scrollCurrentIndex];
-        }
-        //加载后面一个月的数据
-        if (visible.item == self.dateStringArray.count-1) {
-            [self addNextDataFromDateStr:nil];
-        }
-        //回调新的一个月
-        if (self.dateHandler) {
-            double timestamp = [TimeTools getTimestampFromTime:self.currentDateStr dateType:@"yyyy-MM"];
-            NSDate* date = [NSDate dateWithTimeIntervalSince1970:timestamp];
-            self.dateHandler(self.currentDateStr, date, [NSString stringWithFormat:@"%@-%ld", self.selectDateStr, self.selectDayNum]);
-        }
+        [self.calendarCollectionView reloadData];
+        [self scrollCurrentIndex];
+    }
+    //加载后面一个月的数据
+    if (visible.item >= self.dateStringArray.count-2) {
+        [self addNextDataFromDateStr:nil];
+    }
+    //回调新的一个月
+    if (self.dateHandler) {
+//        double timestamp = [TimeTools getTimestampFromTime:self.currentDateStr dateType:@"yyyy-MM"];
+//        NSDate* date = [NSDate dateWithTimeIntervalSince1970:timestamp];
+        self.dateHandler(self.currentDateStr, self.selectDate, [NSString stringWithFormat:@"%@-%ld", self.selectDateStr, self.selectDayNum]);
     }
 }
 

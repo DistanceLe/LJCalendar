@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -20,7 +17,7 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WIm-8p-660">
-                        <rect key="frame" x="80" y="46.5" width="0.0" height="0.0"/>
+                        <rect key="frame" x="79.5" y="46.5" width="0.0" height="0.0"/>
                         <color key="backgroundColor" red="1" green="0.78746598869999995" blue="0.66150162530000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="WIm-8p-660" secondAttribute="height" multiplier="1:1" id="T0h-Jp-2Xn"/>
@@ -28,7 +25,7 @@
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XPe-uv-eoe">
-                        <rect key="frame" x="80" y="46" width="0.0" height="0.0"/>
+                        <rect key="frame" x="79.5" y="46.5" width="0.0" height="0.0"/>
                         <color key="backgroundColor" red="1" green="0.78746598869999995" blue="0.66150162530000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="XPe-uv-eoe" secondAttribute="height" multiplier="1:1" id="9y4-93-IBf"/>
@@ -36,7 +33,7 @@
                         </constraints>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="30" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ewb-Ec-Jx4">
-                        <rect key="frame" x="65" y="32" width="30" height="29.5"/>
+                        <rect key="frame" x="64.5" y="31.5" width="30" height="30"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="Ewb-Ec-Jx4" secondAttribute="height" multiplier="1:1" id="aEs-7i-TBp"/>
                             <constraint firstAttribute="width" constant="30" id="emj-13-s0l"/>
@@ -60,6 +57,7 @@
                     </view>
                 </subviews>
             </view>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="Ewb-Ec-Jx4" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" priority="750" constant="-10" id="0O2-Xh-gkS"/>
                 <constraint firstItem="Ewb-Ec-Jx4" firstAttribute="top" relation="greaterThanOrEqual" secondItem="gTV-IL-0wX" secondAttribute="top" constant="3" id="2dc-AB-iRD"/>
@@ -81,6 +79,7 @@
             <connections>
                 <outlet property="backView" destination="XPe-uv-eoe" id="dWo-BG-YrM"/>
                 <outlet property="backViewWidthConstraint" destination="rq6-7y-UHc" id="nQ6-zr-YCf"/>
+                <outlet property="bottomLine" destination="whT-0o-Lrv" id="ig0-ew-A34"/>
                 <outlet property="chineseNumLabel" destination="eDJ-zE-WyX" id="R9u-BH-s1j"/>
                 <outlet property="dateLabelWidth" destination="emj-13-s0l" id="B4W-7R-Ezo"/>
                 <outlet property="dateNumCenterOffest" destination="0O2-Xh-gkS" id="64H-XL-UtR"/>
@@ -88,7 +87,7 @@
                 <outlet property="todayBackView" destination="WIm-8p-660" id="dhq-eq-9YB"/>
                 <outlet property="todayBackWidthConstraint" destination="y1Q-pC-ha1" id="txk-fC-sxb"/>
             </connections>
-            <point key="canvasLocation" x="-46.5" y="39.5"/>
+            <point key="canvasLocation" x="158" y="54"/>
         </collectionViewCell>
     </objects>
 </document>

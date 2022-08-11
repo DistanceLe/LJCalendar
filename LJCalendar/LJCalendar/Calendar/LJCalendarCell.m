@@ -17,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *todayBackWidthConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *dateNumCenterOffest;
 
+
 @end
 
 @implementation LJCalendarCell
@@ -34,6 +35,8 @@
     
     self.backView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0, 0);
     
+//    self.backgroundColor = [UIColor clearColor];
+//    self.backgroundView.backgroundColor = [UIColor clearColor];
 }
 
 -(void)setHasChineseCalendar:(BOOL)hasChineseCalendar{
@@ -60,13 +63,22 @@
     }
 }
 
--(void)setIsWeekend:(BOOL)isWeekend{
+-(void)setIsWeekend:(BOOL)isWeekend isValid:(BOOL)isValid{
+    self.isValid = isValid;
     if (isWeekend) {
         self.dateNumLabel.textColor = [UIColor colorWithRed:0.8 green:0.2 blue:0.2 alpha:1];
     }else{
         self.dateNumLabel.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
     }
     self.chineseNumLabel.textColor = self.dateNumLabel.textColor;
+    
+    if (isValid) {
+        self.dateNumLabel.alpha = 1;
+        self.chineseNumLabel.alpha = 1;
+    }else{
+        self.dateNumLabel.alpha = 0.3;
+        self.chineseNumLabel.alpha = 0.3;
+    }
 }
 
 -(void)tapCell:(BOOL)animation{

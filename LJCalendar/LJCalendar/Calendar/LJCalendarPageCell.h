@@ -17,6 +17,16 @@
 
 /**  是否显示农历 */
 @property(nonatomic, assign)BOOL showChineseCalendar;
+/**  是否显示 最后一行的线， 默认不显示 */
+@property(nonatomic, assign)BOOL showLastLine;
+
+
+/**  最小 有效的日期 */
+@property(nonatomic, strong)NSDate* minDate;
+/**  最大 有效的日期 */
+@property(nonatomic, strong)NSDate* maxDate;
+@property(nonatomic, strong)NSString* currentYearAndMonth;
+
 
 /**  选中某一天的回调 */
 @property(nonatomic, strong)void(^tapHandler)(NSInteger index);

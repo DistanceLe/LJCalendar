@@ -42,8 +42,8 @@
         //回调 日期，当前的日期，选中的日期
         NSString* commonDate = [TimeTools timestamp:date.timeIntervalSince1970 changeToTimeType:@"yyyy-MM-dd"];
         NSArray* chineseDate = [TimeTools getChineseDateDetailFromDate:date];
-        
-        tempWeakSelf.contentLabel.text = [NSString stringWithFormat:@"%@  (选中的:%@)\n%@,%@,%@,%@",commonDate, selectedDate, chineseDate[0],chineseDate[1], chineseDate[2], chineseDate[3]];
+        NSLog(@"%@", commonDate);
+        tempWeakSelf.contentLabel.text = [NSString stringWithFormat:@"%@  (选中的:%@)\n%@,%@,%@,%@",dateString, selectedDate, chineseDate[0],chineseDate[1], chineseDate[2], chineseDate[3]];
     };
     [self.view addSubview:calendar];
     self.calendarView = calendar;

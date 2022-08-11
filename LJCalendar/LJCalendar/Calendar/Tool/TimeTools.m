@@ -20,6 +20,11 @@ static NSArray* chineseMonth;
 static NSArray* chineseDay;
 static NSArray* chineseWeek;
 
+@interface TimeTools ()
+
+
+@end
+
 @implementation TimeTools
 
 +(void)initialize{
@@ -60,7 +65,16 @@ static NSArray* chineseWeek;
     return locationString;
 }
 
-/**  获取当前时间，格式自定义 ：yyyy-MM-dd HH:mm:ss（完整） */
+/**  获取毫秒级别，  hh:mm:ss:SSS*/
++(NSString *)getCurrentFloatTime{
+    NSDateFormatter * formatter = [[NSDateFormatter alloc ] init];
+    [formatter setDateFormat:@"hh:mm:ss:SSS"];
+    NSString *date =  [formatter stringFromDate:[NSDate date]];
+    NSString *timeLocal = [[NSString alloc] initWithFormat:@"%@", date];
+    return timeLocal;
+}
+
+/**  获取当前时间，格式自定义 ：yyyy-MM-dd HH:mm:ss:SSS（完整） */
 + (NSString*)getCurrentTimesType:(NSString*)type{
     NSDate*  senddate=[NSDate date];
     NSDateFormatter* dateformatter=[[NSDateFormatter alloc] init];
@@ -80,6 +94,12 @@ static NSArray* chineseWeek;
 /**  时间戳转换为时间的方法 -> yyyy-MM-dd HH:mm:ss*/
 + (NSString *)timestampChangesToStandarTime:(uint64_t)timestamp{
 
+    if (timestamp > 9999999999) {
+        NSString* timeStr = @(timestamp).stringValue;
+        timeStr = [timeStr substringToIndex:10];
+        timestamp = timeStr.longLongValue;
+    }
+    
     NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
     [formatter setDateStyle:NSDateFormatterMediumStyle];
     [formatter setTimeStyle:NSDateFormatterShortStyle];
@@ -94,8 +114,18 @@ static NSArray* chineseWeek;
 /**  时间戳 -> 自定义格式的时间：yyyy-MM-dd HH:mm:ss（完整） */
 + (NSString*)timestamp:(uint64_t)timestamp changeToTimeType:(NSString*)type{
     if (timestamp<1){
+        if ([type isEqualToString:@"HH:mm"] && timestamp == 0) {
+            return @"00:00";
+        }
         return @"";
     }
+    if (timestamp > 9999999999) {
+        NSString* timeStr = @(timestamp).stringValue;
+        timeStr = [timeStr substringToIndex:10];
+        timestamp = timeStr.longLongValue;
+    }
+    
+    
     NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
     [formatter setDateStyle:NSDateFormatterMediumStyle];
     [formatter setTimeStyle:NSDateFormatterShortStyle];
@@ -104,6 +134,35 @@ static NSArray* chineseWeek;
     if (timestamp < 1000000000) {
         [formatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
     }
+    
+    NSDate* date = [NSDate dateWithTimeIntervalSince1970:timestamp];
+    NSString* dateString = [formatter stringFromDate:date];
+    
+    return dateString;
+}
+/**  时间戳 -> 自定义格式的时间：yyyy-MM-dd HH:mm:ss（完整） */
++ (NSString*)timestamp:(uint64_t)timestamp changeToOriginTimeType:(NSString*)type{
+//    if (timestamp<1){
+//        if ([type isEqualToString:@"HH:mm"] && timestamp == 0) {
+//            return @"00:00";
+//        }
+//        return @"";
+//    }
+    if (timestamp > 9999999999) {
+        NSString* timeStr = @(timestamp).stringValue;
+        timeStr = [timeStr substringToIndex:10];
+        timestamp = timeStr.longLongValue;
+    }
+    
+    
+    NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:NSDateFormatterMediumStyle];
+    [formatter setTimeStyle:NSDateFormatterShortStyle];
+    
+    [formatter setDateFormat:type];
+//    if (timestamp < 1000000000) {
+//        [formatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+//    }
     
     NSDate* date = [NSDate dateWithTimeIntervalSince1970:timestamp];
     NSString* dateString = [formatter stringFromDate:date];
@@ -125,15 +184,27 @@ static NSArray* chineseWeek;
 }
 
 /**  数字转 时间样式 3600 -> HH:mm:ss（完整）*/
-+(NSString *)timestampChangeTimeStyle:(double)timestamp{
++(NSString *)timestampChangeTimeStyle:(uint64_t)timestamp{
     if (timestamp < 0){
         return @"";
     }
     
+    //大于等于1天的秒数的
+    if (timestamp >= 86400) {
+        
+        NSString* time = [NSString stringWithFormat:@"%ld %@ %ld:%ld:%ld", timestamp/86400, @"天", timestamp%86400/3600, timestamp%3600/60, timestamp%60];
+        return time;
+    }
+    
+    
     NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
     [formatter setDateStyle:NSDateFormatterMediumStyle];
     [formatter setTimeStyle:NSDateFormatterShortStyle];
-    if (timestamp>=3600) {
+    
+    
+    if (timestamp >= 86400) {
+        [formatter setDateFormat:@"dd HH:mm:ss"];
+    }else if (timestamp>=3600) {
         [formatter setDateFormat:@"HH:mm:ss"];
     }else{
         [formatter setDateFormat:@"mm:ss"];
@@ -154,7 +225,11 @@ static NSArray* chineseWeek;
     [formatter setDateFormat:dateType];
     
     NSTimeZone* timeZone = [NSTimeZone localTimeZone];
-    [formatter setTimeZone:timeZone];
+    NSInteger zoneSeconds= [timeZone secondsFromGMT];
+    
+    NSTimeZone* realZone = [NSTimeZone timeZoneForSecondsFromGMT:zoneSeconds];
+    
+    [formatter setTimeZone:realZone];
     
     //------------将字符串按formatter转成nsdate
     NSDate* date = [formatter dateFromString:time];
@@ -223,14 +298,14 @@ static NSArray* chineseWeek;
     
     //第一逆推的周日 时间戳
     double firstWeekTimestamp = currentTimestamp - oneDaySecond*(currentWeekNum-1);
-    NSString* firstWeekStr = [self timestamp:firstWeekTimestamp changeToTimeType:@"yyyy-MM-dd"];
+    NSString* firstWeekStr = [self timestamp:firstWeekTimestamp changeToOriginTimeType:@"yyyy-MM-dd"];
     firstWeekTimestamp = [self getTimestampFromTime:firstWeekStr dateType:@"yyyy-MM-dd"];
     
     //保存第一个时间戳  （当前时间戳）
     [weeksTimestamp addObject:@(currentTimestamp)];
     
     //开始 本周的结束 月/日
-    NSString* weekEndStr = [self timestamp:currentTimestamp changeToTimeType:@"MM/dd"];
+    NSString* weekEndStr = [self timestamp:currentTimestamp changeToOriginTimeType:@"MM/dd"];
     
     while (1) {
         if (firstWeekTimestamp < startTimestamp) {
@@ -238,11 +313,11 @@ static NSArray* chineseWeek;
         }else{
             [weeksTimestamp addObject:@(firstWeekTimestamp)];
             
-            NSString* weekStartStr = [self timestamp:firstWeekTimestamp changeToTimeType:@"MM/dd"];
+            NSString* weekStartStr = [self timestamp:firstWeekTimestamp changeToOriginTimeType:@"MM/dd"];
             
             [weeksArray addObject:[NSString stringWithFormat:@"%@\n%@", weekStartStr, weekEndStr]];
             
-            weekEndStr = [self timestamp:(firstWeekTimestamp - oneDaySecond) changeToTimeType:@"MM/dd"];
+            weekEndStr = [self timestamp:(firstWeekTimestamp - oneDaySecond) changeToOriginTimeType:@"MM/dd"];
         }
         
         firstWeekTimestamp -= oneWeekSecond;
@@ -271,9 +346,9 @@ static NSArray* chineseWeek;
     double startTimestamp = [self getTimestampFromTime:kStart_Date dateType:@"yyyy-MM-dd"];
     double currentTimestamp = [self getCurrentTimestamp];
     
-    NSString* curretnDayStr = [self timestamp:currentTimestamp changeToTimeType:@"yyyy-MM-dd"];
+    NSString* curretnDayStr = [self timestamp:currentTimestamp changeToOriginTimeType:@"yyyy-MM-dd"];
     double currentDayTimestamp = [self getTimestampFromTime:curretnDayStr dateType:@"yyyy-MM-dd"];
-    curretnDayStr = [self timestamp:currentDayTimestamp changeToTimeType:@"MM\ndd"];
+    curretnDayStr = [self timestamp:currentDayTimestamp changeToOriginTimeType:@"MM\ndd"];
     
     //添加 今天00：00 的 月日，及 时间戳
     [daysArray addObject:curretnDayStr];
@@ -284,7 +359,7 @@ static NSArray* chineseWeek;
         if (currentDayTimestamp < startTimestamp) {
             break;
         }else{
-            curretnDayStr = [self timestamp:currentDayTimestamp changeToTimeType:@"MM\ndd"];
+            curretnDayStr = [self timestamp:currentDayTimestamp changeToOriginTimeType:@"MM\ndd"];
             [daysArray addObject:curretnDayStr];
             [daysTimestampArray addObject:@(currentDayTimestamp)];
         }
@@ -312,13 +387,15 @@ static NSArray* chineseWeek;
 
 /**  一个月里面含有多少天  yyyy-MM */
 +(NSInteger)getMonthDayNumFromDateString:(NSString*)dateString{
-    NSDate* date = [NSDate dateWithTimeIntervalSince1970:[self getTimestampFromTime:dateString dateType:@"yyyy-MM"]];
+    dateString = [NSString stringWithFormat:@"%@-02", dateString];
+    NSDate* date = [NSDate dateWithTimeIntervalSince1970:[self getTimestampFromTime:dateString dateType:@"yyyy-MM-dd"]];
     return [self getMonthDayNumFromDate:date];
 }
 
 /**  一个月里面有几周  yyyy-MM */
 +(NSInteger)getMonthWeekNumFromDateString:(NSString*)dateString{
-    NSDate* date = [NSDate dateWithTimeIntervalSince1970:[self getTimestampFromTime:dateString dateType:@"yyyy-MM"]];
+    dateString = [NSString stringWithFormat:@"%@-02", dateString];
+    NSDate* date = [NSDate dateWithTimeIntervalSince1970:[self getTimestampFromTime:dateString dateType:@"yyyy-MM-dd"]];
     return [self getMonthWeekNumFromDate:date];
 }
 

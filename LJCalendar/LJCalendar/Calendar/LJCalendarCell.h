@@ -16,7 +16,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *chineseNumLabel;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *dateLabelWidth;
+@property (weak, nonatomic) IBOutlet UIView *bottomLine;
 
+/**  是否可以点击 */
+@property (nonatomic, assign)BOOL isValid;
 
 @property (nonatomic, assign)BOOL isTap;
 @property (nonatomic, assign)BOOL hasChineseCalendar;
@@ -25,7 +28,7 @@
 -(void)setIsToday:(BOOL)isToday;
 
 /**  设置是否是 周末 */
--(void)setIsWeekend:(BOOL)isWeekend;
+-(void)setIsWeekend:(BOOL)isWeekend isValid:(BOOL)isValid;
 
 /**  点击了cell */
 -(void)tapCell:(BOOL)animation;
